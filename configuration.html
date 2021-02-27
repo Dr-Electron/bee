@@ -268,7 +268,7 @@ reconnect_interval_secs  = 30
 </tbody></table>
 <h4 id="peers"><a class="header" href="#peers">peers</a></h4>
 <table><thead><tr><th align="center">Name</th><th align="center">Description</th><th align="center">Type</th></tr></thead><tbody>
-<tr><td align="center">address</td><td align="center">libp2p formatet address</td><td align="center">string</td></tr>
+<tr><td align="center">address</td><td align="center">libp2p formatet address(PeerID can be found on the dashboard or in the logs. It starts with <code>12D3</code>)</td><td align="center">string</td></tr>
 <tr><td align="center">alias</td><td align="center">alias of the peer</td><td align="center">string</td></tr>
 </tbody></table>
 <p>Example:</p>
@@ -277,11 +277,14 @@ identity_private_key  = &quot;c7826775ab7b0caffa359483694ef9fb44c4053fb46ae764fe
 [peering.manual]
 unknown_peers_limit = 4
 [[peering.manual.peers]]
-address = &quot;/ip4/0.0.0.0/tcp/15600&quot;
+address = &quot;/ip4/192.0.2.0/tcp/15600/p2p/PeerID&quot;
 alias   = &quot;some peer&quot;
 [[peering.manual.peers]]
-address = &quot;/ip4/1.1.1.1/tcp/15600&quot;
+address = &quot;/ip6/2001:db8::/tcp/15600/p2p/PeerID&quot;
 alias   = &quot;another peer&quot;
+[[peering.manual.peers]]
+address = &quot;/dns/example.com/tcp/15600/p2p/PeerID&quot;
+alias   = &quot;yet another peer&quot;
 </code></pre>
 <h2 id="4-protocol"><a class="header" href="#4-protocol">4. Protocol</a></h2>
 <table><thead><tr><th align="center">Name</th><th align="center">Description</th><th align="center">Type</th></tr></thead><tbody>

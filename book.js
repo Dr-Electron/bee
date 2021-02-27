@@ -32,12 +32,12 @@ function playground_text(playground) {
             method: 'POST',
             mode: 'cors',
         })
-            .then(response => response.json())
-            .then(response => {
-                // get list of crates available in the rust playground
-                let playground_crates = response.crates.map(item => item["id"]);
-                playgrounds.forEach(block => handle_crate_list_update(block, playground_crates));
-            });
+        .then(response => response.json())
+        .then(response => {
+            // get list of crates available in the rust playground
+            let playground_crates = response.crates.map(item => item["id"]);
+            playgrounds.forEach(block => handle_crate_list_update(block, playground_crates));
+        });
     }
 
     function handle_crate_list_update(playground_block, playground_crates) {
@@ -132,9 +132,9 @@ function playground_text(playground) {
             mode: 'cors',
             body: JSON.stringify(params)
         })
-            .then(response => response.json())
-            .then(response => result_block.innerText = response.result)
-            .catch(error => result_block.innerText = "Playground Communication: " + error.message);
+        .then(response => response.json())
+        .then(response => result_block.innerText = response.result)
+        .catch(error => result_block.innerText = "Playground Communication: " + error.message);
     }
 
     // Syntax highlighting Configuration
@@ -146,7 +146,7 @@ function playground_text(playground) {
     let code_nodes = Array
         .from(document.querySelectorAll('code'))
         // Don't highlight `inline code` blocks in headers.
-        .filter(function (node) { return !node.parentElement.classList.contains("header"); });
+        .filter(function (node) {return !node.parentElement.classList.contains("header"); });
 
     if (window.ace) {
         // language-rust class needs to be removed for editable
@@ -307,10 +307,23 @@ function playground_text(playground) {
     function set_theme(theme, store = true) {
         let ace_theme;
 
-        stylesheets.ayuHighlight.disabled = true;
-        stylesheets.tomorrowNight.disabled = true;
-        stylesheets.highlight.disabled = false;
-        ace_theme = "ace/theme/dawn";
+        if (theme == 'coal' || theme == 'navy') {
+            stylesheets.ayuHighlight.disabled = true;
+            stylesheets.tomorrowNight.disabled = false;
+            stylesheets.highlight.disabled = true;
+
+            ace_theme = "ace/theme/tomorrow_night";
+        } else if (theme == 'ayu') {
+            stylesheets.ayuHighlight.disabled = false;
+            stylesheets.tomorrowNight.disabled = true;
+            stylesheets.highlight.disabled = true;
+            ace_theme = "ace/theme/tomorrow_night";
+        } else {
+            stylesheets.ayuHighlight.disabled = true;
+            stylesheets.tomorrowNight.disabled = true;
+            stylesheets.highlight.disabled = false;
+            ace_theme = "ace/theme/dawn";
+        }
 
         setTimeout(function () {
             themeColorMetaTag.content = getComputedStyle(document.body).backgroundColor;
@@ -350,7 +363,7 @@ function playground_text(playground) {
         set_theme(theme);
     });
 
-    themePopup.addEventListener('focusout', function (e) {
+    themePopup.addEventListener('focusout', function(e) {
         // e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
         if (!!e.relatedTarget && !themeToggleButton.contains(e.relatedTarget) && !themePopup.contains(e.relatedTarget)) {
             hideThemes();
@@ -358,7 +371,7 @@ function playground_text(playground) {
     });
 
     // Should not be needed, but it works around an issue on macOS & iOS: https://github.com/rust-lang/mdBook/issues/628
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
         if (themePopup.style.display === 'block' && !themeToggleButton.contains(e.target) && !themePopup.contains(e.target)) {
             hideThemes();
         }
@@ -580,7 +593,7 @@ function playground_text(playground) {
     });
 })();
 
-(function scrollToTop() {
+(function scrollToTop () {
     var menuTitle = document.querySelector('.menu-title');
 
     menuTitle.addEventListener('click', function () {
