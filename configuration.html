@@ -270,7 +270,7 @@ reconnect_interval_secs  = 30
 </tbody></table>
 <h4 id="peers"><a class="header" href="#peers">peers</a></h4>
 <table><thead><tr><th align="center">Name</th><th align="center">Description</th><th align="center">Type</th></tr></thead><tbody>
-<tr><td align="center">address</td><td align="center">libp2p formatet address(PeerID can be found on the dashboard or in the logs. It starts with <code>12D3</code>)</td><td align="center">string</td></tr>
+<tr><td align="center">address</td><td align="center">libp2p formatted address(PeerID can be found on the dashboard or in the logs. It starts with <code>12D3</code>)</td><td align="center">string</td></tr>
 <tr><td align="center">alias</td><td align="center">alias of the peer</td><td align="center">string</td></tr>
 </tbody></table>
 <p>Example:</p>
@@ -337,11 +337,11 @@ ms_sync_count = 200
 </code></pre>
 <h2 id="5-rest_api"><a class="header" href="#5-rest_api">5. Rest_api</a></h2>
 <table><thead><tr><th align="center">Name</th><th align="center">Description</th><th align="center">Type</th></tr></thead><tbody>
-<tr><td align="center">binding_port</td><td align="center">binding port for rest api</td><td align="center">integer[u16]</td></tr>
-<tr><td align="center">binding_ip_addr</td><td align="center">binding address for rest api</td><td align="center">string[IpAddr]</td></tr>
+<tr><td align="center">binding_port</td><td align="center">binding port for rest API</td><td align="center">integer[u16]</td></tr>
+<tr><td align="center">binding_ip_addr</td><td align="center">binding address for rest API</td><td align="center">string[IpAddr]</td></tr>
 <tr><td align="center">feature_proof_of_work</td><td align="center">enable pow</td><td align="center">bool</td></tr>
-<tr><td align="center">public_routes</td><td align="center">api routes which should be public</td><td align="center">array of strings</td></tr>
-<tr><td align="center">allowed_ips</td><td align="center">list of whitelisted ips</td><td align="center">string[IpAddr]</td></tr>
+<tr><td align="center">public_routes</td><td align="center">API routes which should be public</td><td align="center">array of strings</td></tr>
+<tr><td align="center">allowed_ips</td><td align="center">list of whitelisted IPs</td><td align="center">string[IpAddr]</td></tr>
 </tbody></table>
 <p>Example:</p>
 <pre><code class="language-toml">[rest_api]
@@ -378,7 +378,7 @@ allowed_ips = [
 <table><thead><tr><th align="center">Name</th><th align="center">Description</th><th align="center">Type</th></tr></thead><tbody>
 <tr><td align="center">full_path</td><td align="center">path to the full snapshot</td><td align="center">string</td></tr>
 <tr><td align="center">delta_path</td><td align="center">path to the delta snapshot</td><td align="center">string</td></tr>
-<tr><td align="center">download_urls</td><td align="center">list of download urls for the snapshot</td><td align="center">array of strings</td></tr>
+<tr><td align="center">download_urls</td><td align="center">list of download URLs for the snapshot</td><td align="center">array of strings</td></tr>
 <tr><td align="center">depth</td><td align="center">TO-DO</td><td align="center">integer[u32]</td></tr>
 <tr><td align="center">interval_synced</td><td align="center">TO-DO</td><td align="center">integer[u32]</td></tr>
 <tr><td align="center">interval_unsynced</td><td align="center">TO-DO</td><td align="center">integer[u32]</td></tr>
