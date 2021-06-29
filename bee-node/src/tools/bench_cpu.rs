@@ -1,8 +1,8 @@
-use std::{sync::{Arc, atomic::{AtomicU64, Ordering}}, thread::{self}, time::{self, Duration}};
+use std::{convert::TryFrom, sync::{Arc, atomic::{AtomicU64, Ordering}}, thread::{self}, time::{self, Duration}};
 
 use bee_crypto::ternary::{sponge::{BATCH_SIZE, CurlP, CurlPRounds, Sponge}};
 use bee_pow::providers::miner::MinerCancel;
-use bee_ternary::{T1B1Buf, TritBuf, b1t6};
+use bee_ternary::{T1B1Buf, Trit, TritBuf, Tryte, b1t6::{self}};
 use structopt::StructOpt;
 use thiserror::Error;
 
@@ -38,7 +38,7 @@ pub fn exec(tool: &BenchmarkCPUTool) -> Result<(), BenchmarkCPUError> {
 
     //Stop if the timeout has exceeded
     let time_thread = thread::spawn(move || {
-        std::thread::sleep(Duration::from_secs(60));
+        std::thread::sleep(Duration::from_secs(120));
         cancel.trigger();
     });
 
@@ -77,6 +77,14 @@ pub fn exec(tool: &BenchmarkCPUTool) -> Result<(), BenchmarkCPUError> {
     Ok(())
 }
 
+fn encode_group(byte: u8) -> (i8, i8) {
+    let v = (byte as i8) as i16 + (27 / 2) * 27 + 27 / 2;
+    let quo = (v / 27) as i8;
+    let rem = (v % 27) as i8;
+
+    (rem + -13 as i8, quo + -13 as i8)
+}
+
 fn cpu_benchmark_worker(_pow_digest: &[u8], start_nonce: u64, cancel: MinerCancel, counter: Arc<AtomicU64>) -> Result<(), BenchmarkCPUError> {
     let mut pow_digest = TritBuf::<T1B1Buf>::new();
     b1t6::encode::<T1B1Buf>(&_pow_digest).iter().for_each(|t| pow_digest.push(t));
@@ -87,12 +95,28 @@ fn cpu_benchmark_worker(_pow_digest: &[u8], start_nonce: u64, cancel: MinerCance
     //let mut buffers = Vec::<TritBuf<T1B1Buf>>::with_capacity(BATCH_SIZE);
     let mut buffers = TritBuf::<T1B1Buf>::new();
 
-    for i in 0..BATCH_SIZE {
-        let nonce_trits = b1t6::encode::<T1B1Buf>(&(nonce + i as u64).to_le_bytes());
-        buffers.append(&pow_digest);
-        buffers.append(&nonce_trits);
+    let mut trits: TritBuf<T1B1Buf> = TritBuf::new();
+    let time_start = std::time::Instant::now();
+    let test_trits = Tryte::N.as_trits();
+    for i in 0..1_000_000_000 {
+        //let nonce_trits = b1t6::encode::<T1B1Buf>(&(nonce + i as u64).to_le_bytes());
+        //buffers.append(&pow_digest);
+        //buffers.append(&nonce_trits);
         //println!("POW_DIGEST");
+        let (t1, t2) = encode_group(127);
+        //let test = Tryte::try_from(t1).unwrap();
+        //let test2 = test.as_trits();
+        //println!("Trits: {} Len:{}", test2, test2.len());
+        trits.append(test_trits);
+        trits.append(test_trits);
+        //trits.append(Tryte::try_from(t2).unwrap().as_trits());
+        //[t1, t2]
+        //    .iter()
+            // Unwrap is safe, `encode_group` is valid for all inputs
+        //    .for_each(|b| trits.append(Tryte::try_from(*b).unwrap().as_trits()));
     }
+    println!("Elapsed Time: {:?}", time_start.elapsed());
+    //eturn Ok(());
 
     //let mut test_count: u64 = 0;
     while !cancel.is_cancelled() {
