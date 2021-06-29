@@ -1,6 +1,7 @@
 // Copyright 2020-2021 IOTA Stiftung
 // SPDX-License-Identifier: Apache-2.0
 
+mod bench_cpu;
 mod ed25519;
 mod p2p_identity;
 mod password;
@@ -30,6 +31,8 @@ pub enum Tool {
     SnapshotInfo(snapshot_info::SnapshotInfoTool),
     /// Generates password salt and hash.
     Password(password::PasswordTool),
+    /// Executes a CPU Benchmark.
+    BenchCPU(bench_cpu::BenchmarkCPUTool),
 }
 
 #[derive(Debug, Error)]
@@ -46,6 +49,8 @@ pub enum ToolError {
     SnapshotInfo(#[from] snapshot_info::SnapshotInfoError),
     #[error("{0}")]
     Password(#[from] password::PasswordError),
+    #[error("{0}")]
+    BencharkCPU(#[from] bench_cpu::BenchmarkCPUError),
 }
 
 pub fn exec(tool: &Tool) -> Result<(), ToolError> {
@@ -58,6 +63,7 @@ pub fn exec(tool: &Tool) -> Result<(), ToolError> {
         Tool::Sled(tool) => sled::exec(tool)?,
         Tool::SnapshotInfo(tool) => snapshot_info::exec(tool)?,
         Tool::Password(tool) => password::exec(tool)?,
+        Tool::BenchCPU(tool) => bench_cpu::exec(tool)?,
     }
 
     Ok(())
